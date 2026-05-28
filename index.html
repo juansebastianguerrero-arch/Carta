@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti, Juanis 💛</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* ============ RESET & BASE ============ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            color: #3d2c2c;
+            background: #fdf6f0;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* ============ PRELOADER ============ */
+        .preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fdf6f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-heart {
+            font-size: 3rem;
+            animation: heartbeat 1s infinite;
+        }
+
+        .preloader-text {
+            margin-top: 1rem;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #c97b6b;
+            opacity: 0;
+            animation: fadeInText 1s 0.5s forwards;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
+        }
+
+        /* ============ PARTICLES CANVAS ============ */
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            
+        }
+
+        /* ============ MUSIC TOGGLE ============ */
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: rgba(201, 123, 107, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(201, 123, 107, 0.4);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(201, 123, 107, 0.6);
+        }
+
+        .music-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 18px;
+        }
+
+        .music-bars .bar {
+            width: 3px;
+            background: #fff;
+            border-radius: 2px;
+            animation: none;
+        }
+
+        .music-bars.playing .bar {
+            animation: barDance 0.6s ease-in-out infinite alternate;
+        }
+
+        .music-bars .bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+        .music-bars .bar:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+        .music-bars .bar:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+        .music-bars .bar:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+
+        @keyframes barDance {
+            0% { height: 4px; }
+            100% { height: 18px; }
+        }
+
+        /* ============ SCROLL PROGRESS ============ */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #c97b6b, #e8a87c, #d4a5a5);
+            z-index: 9998;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* ============ HERO SECTION ============ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(ellipse at center, rgba(232, 168, 124, 0.15) 0%, transparent 70%);
+        }
+
+        .hero-date {
+            font-family: 'Lora', serif;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #c97b6b;
+            opacity: 0;
+            animation: slideUp 1s 1.5s forwards;
+        }
+
+        .hero-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #c97b6b;
+            margin: 1rem 0;
+            opacity: 0;
+            animation: slideUp 1s 1.8s forwards;
+            text-shadow: 2px 4px 8px rgba(201, 123, 107, 0.2);
+        }
+
+        .hero-subtitle {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: #8c6a5a;
+            max-width: 500px;
+            opacity: 0;
+            animation: slideUp 1s 2.1s forwards;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            opacity: 0;
+            animation: slideUp 1s 2.8s forwards;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-right: 2px solid #c97b6b;
+            border-bottom: 2px solid #c97b6b;
+            transform: rotate(45deg);
+            animation: bounceArrow 2s infinite;
+        }
+
+        @keyframes bounceArrow {
+            0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translateY(0); }
+            40% { transform: rotate(45deg) translateY(10px); }
+            60% { transform: rotate(45deg) translateY(5px); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============ LETTER SECTIONS ============ */
+        .letter-container {
+            position: relative;
+            z-index: 2;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .letter-section {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .letter-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-divider {
+            text-align: center;
+            margin: 4rem 0;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease;
+        }
+
+        .section-divider.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .divider-symbol {
+            font-size: 1.5rem;
+            color: #d4a5a5;
+            letter-spacing: 12px;
+        }
+
+        /* ============ PARAGRAPH STYLES ============ */
+        .letter-paragraph {
+            font-family: 'Lora', serif;
+            font-size: clamp(1rem, 2.2vw, 1.15rem);
+            line-height: 2;
+            color: #4a3636;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .emphasis {
+            font-style: italic;
+            color: #c97b6b;
+            font-weight: 600;
+        }
+
+        .highlight-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4em;
+            color: #c97b6b;
+            font-weight: 700;
+        }
+
+        .section-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            color: #c97b6b;
+            margin-bottom: 2rem;
+            font-style: italic;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #c97b6b, transparent);
+            transition: width 1s ease 0.5s;
+        }
+
+        .visible .section-heading::after {
+            width: 100%;
+        }
+
+        /* ============ JAJA EFFECT ============ */
+        .jaja-container {
+            display: inline;
+        }
+
+        .jaja-text {
+            display: inline;
+            font-weight: 600;
+            background: linear-gradient(90deg, #e8a87c, #c97b6b, #d4a5a5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: jajaShake 0.5s ease-in-out;
+        }
+
+        @keyframes jajaShake {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
+        }
+
+        /* ============ QUOTE BLOCK ============ */
+        .quote-block {
+            border-left: 3px solid #d4a5a5;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            background: rgba(212, 165, 165, 0.08);
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+        }
+
+        .quote-block .letter-paragraph {
+            margin-bottom: 0;
+            color: #7a5a5a;
+        }
+
+        /* ============ INTIMATE SECTION ============ */
+        .intimate-zone {
+            position: relative;
+            margin-top: 6rem;
+            padding: 4rem 0;
+        }
+
+        .intimate-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50vw;
+            right: -50vw;
+            bottom: 0;
+            background: linear-gradient(180deg, 
+                transparent 0%,
+                rgba(45, 30, 30, 0.03) 10%,
+                rgba(45, 30, 30, 0.95) 35%,
+                rgba(35, 20, 25, 1) 50%,
+                rgba(45, 30, 30, 0.95) 65%,
+                rgba(45, 30, 30, 0.03) 90%,
+                transparent 100%
+            );
+            z-index: -1;
+        }
+
+        .intimate-zone .letter-paragraph {
+            color: #e8d5c4;
+            line-height: 2.2;
+        }
+
+        .intimate-zone .emphasis {
+            color: #e8a87c;
+        }
+
+        .intimate-zone .section-heading {
+            color: #e8a87c;
+        }
+
+        .intimate-zone .section-heading::after {
+            background: linear-gradient(90deg, #e8a87c, transparent);
+        }
+
+        .whisper-text {
+            font-size: 0.92em;
+            opacity: 0.85;
+            font-style: italic;
+            color: #c9a089 !important;
+            transition: opacity 0.5s ease;
+        }
+
+        .whisper-text:hover {
+            opacity: 1;
+        }
+
+        .bold-whisper {
+            font-weight: 700;
+            color: #e8a87c !important;
+            font-size: 1.05em;
+        }
+
+        .intimate-jaja {
+            display: inline-block;
+            font-weight: 700;
+            color: #e8a87c !important;
+            -webkit-text-fill-color: #e8a87c;
+            animation: intimateGlow 2s infinite alternate;
+        }
+
+        @keyframes intimateGlow {
+            from { text-shadow: 0 0 5px rgba(232, 168, 124, 0.3); }
+            to { text-shadow: 0 0 20px rgba(232, 168, 124, 0.6); }
+        }
+
+        /* ============ FINAL SIGN ============ */
+        .final-sign {
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .final-sign .big-love {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: #c97b6b;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .final-sign.visible .big-love {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .final-sign .sign-name {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #8c6a5a;
+            letter-spacing: 2px;
+        }
+
+        .heart-float {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+            font-size: 1.2rem;
+            animation: floatHeart 3s ease-out forwards;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0.3) rotate(45deg);
+            }
+        }
+
+        /* ============ ENVELOPE INTRO ============ */
+        .envelope-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            background: #fdf6f0;
+            transition: opacity 1s ease, visibility 1s ease;
+            cursor: pointer;
+        }
+
+        .envelope-wrapper.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope {
+            width: 280px;
+            height: 180px;
+            position: relative;
+            transition: transform 0.5s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8a87c, #c97b6b);
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(201, 123, 107, 0.3);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 100px solid #d4896e;
+            transform-origin: top;
+            transition: transform 0.8s ease;
+            z-index: 2;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-letter-peek {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            height: 60%;
+            background: #fdf6f0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Dancing Script', cursive;
+            color: #c97b6b;
+            font-size: 1.1rem;
+            transition: transform 0.8s ease 0.3s;
+        }
+
+        .envelope.open .envelope-letter-peek {
+            transform: translateY(-60px);
+        }
+
+        .envelope-instruction {
+            margin-top: 2rem;
+            font-family: 'Lora', serif;
+            font-style: italic;
+            color: #c97b6b;
+            font-size: 0.95rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 600px) {
+            .letter-container {
+                padding: 0 1.2rem 4rem;
+            }
+
+            .letter-paragraph {
+                font-size: 1rem;
+                line-height: 1.9;
+            }
+
+            .music-toggle {
+                top: 12px;
+                right: 12px;
+                width: 42px;
+                height: 42px;
+            }
+
+            .envelope {
+                width: 220px;
+                height: 145px;
+            }
+
+            .envelope-flap {
+                border-left-width: 110px;
+                border-right-width: 110px;
+                border-top-width: 80px;
+            }
+
+            .intimate-zone {
+                padding: 3rem 0;
+            }
+        }
+
+        /* ============ TYPEWRITER ============ */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid #c97b6b;
+            white-space: nowrap;
+            animation: typing 3s steps(30) 1s forwards, blinkCaret 0.7s step-end infinite;
+            width: 0;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .typewriter.done {
+            width: auto;
+            border-right: none;
+            white-space: normal;
+            animation: none;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blinkCaret {
+            from, to { border-color: transparent; }
+            50% { border-color: #c97b6b; }
+        }
+
+        /* ============ GLOW PULSE FOR KEY PHRASES ============ */
+        .glow-phrase {
+            display: inline;
+            position: relative;
+        }
+
+        .glow-phrase::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            right: -4px;
+            bottom: -2px;
+            height: 40%;
+            background: rgba(232, 168, 124, 0.15);
+            border-radius: 4px;
+            z-index: -1;
+            transition: background 0.3s ease;
+        }
+
+        .glow-phrase:hover::after {
+            background: rgba(232, 168, 124, 0.3);
+        }
+
+        /* ============ SPARKLE CURSOR ============ */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9996;
+            font-size: 0.7rem;
+            animation: sparkleFade 0.8s ease-out forwards;
+        }
+
+        @keyframes sparkleFade {
+            0% { opacity: 1; transform: scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ENVELOPE INTRO -->
+    <div class="envelope-wrapper" id="envelopeWrapper">
+        <div style="text-align: center;">
+            <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body">
+                    <div class="envelope-letter-peek">Para Juanis 💛</div>
+                </div>
+            </div>
+            <p class="envelope-instruction">Toca para abrir</p>
+        </div>
+    </div>
+
+    <!-- PRELOADER -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-heart">💛</div>
+        <p class="preloader-text">Preparando algo especial...</p>
+    </div>
+
+    <!-- SCROLL PROGRESS BAR -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- MUSIC TOGGLE -->
+    <button class="music-toggle" id="musicToggle" title="Música">
+        <div class="music-bars" id="musicBars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </button>
+
+    <!-- PARTICLES -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+        <p class="hero-date">Feliz Cumpleaños</p>
+        <h1 class="hero-title">Juanis</h1>
+        <p class="hero-subtitle">Una carta escrita desde el corazón, a las 2am, pensando en ti...</p>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ============ LETTER ============ -->
+    <div class="letter-container">
+
+        <!-- SECTION 1: INTRO -->
+        <div class="letter-section" data-section="1">
+            <h2 class="section-heading">Porque quiero ser el primero...</h2>
+            <p class="letter-paragraph">
+                <span class="highlight-name">Juanis,</span> te escribí esta carta para ser el primero sí o sí que te celebre de primeras en tus cumples, porque el viernes vuelvo al trabajo, saldré y el sábado será de recuperación y estar con Sofía, así que quiero darte esta cartica para empezar deseándote un <span class="emphasis">maravilloso año más de vida.</span>
+            </p>
+            <p class="letter-paragraph">
+                No sabes lo feliz que me siento de tantas cosas que me cuentas, ya sean experiencias malas, viajes o conciertos que tienes, o simplemente <span class="glow-phrase">la alegría que me da de verte con Blue en tus historias.</span> 🐾
+            </p>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-symbol">✦ ✦ ✦</span>
+        </div>
+
+        <!-- SECTION 2: MEJOR PRODUCTO -->
+        <div class="letter-section" data-section="2">
+            <h2 class="section-heading">El mejor producto de la fábrica...</h2>
+            <p class="letter-paragraph">
+                Hace muchos años hablamos de que éramos <span class="emphasis">el mejor producto de la fábrica de mejores amigos,</span> y hoy rectifico que, como diría Mate en Cars: <span class="glow-phrase">"hice una muy buena elección."</span>
+            </p>
+            <p class="letter-paragraph">
+                Porque eres una <span class="emphasis">mujer extraordinaria</span> que me encanta poder escuchar y entender siempre que se pueda. De admirarte desde la distancia porque eres increíble en todo lo que haces. Tienes una imaginación, talento y sueños increíbles, preciosa <span class="highlight-name">Juana.</span>
+            </p>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-symbol">✦ ✦ ✦</span>
+        </div>
+
+        <!-- SECTION 3: DESEOS -->
+        <div class="letter-section" data-section="3">
+            <h2 class="section-heading">Mis deseos para ti...</h2>
+            <p class="letter-paragraph">
+                Deseo que Dios cumpla cada sueño de tu corazón, porque de este lado, yo le pediré que siempre te deje mostrar <span class="emphasis">esa linda sonrisa que tienes,</span> esa espectacular personalidad que tienes, y así mismo que siempre tengas esa marca de persona como la tienes tú...
+            </p>
+            <p class="letter-paragraph">
+                con tus ronquidos <span class="jaja-text">JAJAJAJAJAJAJAJA</span> y súper risa 😂
+            </p>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-symbol">✦ ✦ ✦</span>
+        </div>
+
+        <!-- SECTION 4: TE AMO -->
+        <div class="letter-section" data-section="4">
+            <h2 class="section-heading">A las 2am, pensando en ti...</h2>
+            <div class="quote-block">
+                <p class="letter-paragraph">
+                    Te amo con todo mi corazón <span class="highlight-name">Juanita,</span> perdón lo imbécil que he sido. Te confieso que esto lo escribo a las 2am porque pienso en ti y en que es un lujo tenerte en mi vida.
+                </p>
+            </div>
+            <p class="letter-paragraph">
+                Eres una mujer que ante cualquier adversidad siempre se ha sabido <span class="emphasis">levantar y seguir</span> en las peleas o circunstancias de la vida.
+            </p>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-symbol">✦ ✦ ✦</span>
+        </div>
+
+        <!-- SECTION 5: AVENTURA -->
+        <div class="letter-section" data-section="5">
+            <h2 class="section-heading">Nuestra aventura pendiente...</h2>
+            <p class="letter-paragraph">
+                Tú y yo siempre vamos a tener <span class="emphasis">esa aventura pendiente</span> que te quiero hacer vivir, conocer y disfrutar cuando tenga estabilidad financiera, y siempre te lo he dicho.
+            </p>
+            <p class="letter-paragraph">
+                <span class="glow-phrase">Te amo Juanita</span> y bendigo la vida de tu mamá, Blue, ese angelito que tienes en el cielo que siempre te ve 🕊️ y créeme que tengo la misión de hacerte pasar un espectacular cumpleaños en un futuro que no sea tan lejano <span class="jaja-text">jajajajajaja</span>
+            </p>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-symbol">✦ ✦ ✦</span>
+        </div>
+
+        <!-- SECTION 6: NUNCA LO OLVIDES -->
+        <div class="letter-section" data-section="6">
+            <h2 class="section-heading">Nunca lo olvides...</h2>
+            <p class="letter-paragraph">
+                Te amo y mucho <span class="highlight-name">Juana,</span> nunca lo olvides. Te deseo y mucho... deseo grandes proyectos en tu vida, grandes bendiciones en tu día a día, pero que nunca te falte <span class="emphasis">ni un gramo de salud y de voluntad</span> para cambiar tu mundo a como se te antoje, ¿okei preciosa?
+            </p>
+            <p class="letter-paragraph">
+                Que sean <span class="emphasis">23 años llenos de amor</span> de las personas que se han dado el lujo de conocerte. Me encanta estar contigo y tiraré un factou: <span class="glow-phrase">hace falta tiempo para de verdad gozarnos cualquier salida.</span>
+            </p>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-symbol">✦ ✦ ✦</span>
+        </div>
+
+        <!-- SECTION 7: UN PENDEJO QUE TE AMA -->
+        <div class="letter-section" data-section="7">
+            <h2 class="section-heading">Un pendejo que te ama...</h2>
+            <p class="letter-paragraph">
+                Espero darte por la cola la próxima semana que nos veamos 😏 pero mientras tanto, quiero que sepas que tienes <span class="emphasis">un pendejo que te ama,</span> admira como has vivido tu vida y que le alegra que a pesar de que no estás donde quieres estar, <span class="glow-phrase">has hecho cosas muy bonitas en tu vida.</span>
+            </p>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-symbol">· · ·</span>
+        </div>
+
+        <!-- ============ INTIMATE ZONE ============ -->
+        <div class="intimate-zone">
+            <div class="letter-section" data-section="8">
+                <h2 class="section-heading">Y hablando del bonito ser humano que eres...</h2>
+                <p class="letter-paragraph">
+                    Te amo y sabes que siempre te hablo del bonito ser humano que eres, pero de la mejor manera posible quiero decirte en esta carta que <span class="bold-whisper">siempre me parecerás muy guapa.</span>
+                </p>
+                <p class="letter-paragraph whisper-text">
+                    Sabes que una de mis debilidades hacia ti son los cachetes que tienes... que siempre te he dicho que tienes <span class="bold-whisper">una nariz perfecta</span> que sin cirugía es simplemente perfecta...
+                </p>
+                <p class="letter-paragraph whisper-text">
+                    Y que <span class="bold-whisper">tu mirada</span> pasa a jugar como tú quieras: pasas de ser la más dulce a la mirada más coqueta o astuta en cuestión de segundos. Eres muy talentosa y tienes muchos dones de Dios, hermosa... así que por favor, <span class="emphasis">úsalos a tu favor.</span>
+                </p>
+            </div>
+
+            <div class="letter-section" data-section="9">
+                <p class="letter-paragraph whisper-text" style="margin-top: 2rem;">
+                    Y sí, por último, después de tremendo sermón... me atrevo a decirte sobrio que <span class="bold-whisper">me parece muy bonito tu cuerpo.</span>
+                </p>
+                <p class="letter-paragraph" style="text-align: center; margin: 2rem 0;">
+                    <span class="bold-whisper" style="font-size: 1.1em;">Muero por morderte una teta a ver si son reales</span> <span class="intimate-jaja">JAJAJAJAJAJAJ</span>
+                </p>
+                <p class="letter-paragraph whisper-text" style="margin-top: 1.5rem;">
+                    Bromita... pero <span class="bold-whisper">besos en esa cola 😏</span>
+                </p>
+            </div>
+
+            <div class="letter-section" data-section="10">
+                <p class="letter-paragraph" style="margin-top: 3rem; text-align: center; font-size: 1.1em;">
+                    No dejes de ser tú y <span class="emphasis">jamás dejes tu esencia</span> en un lugar o relación que sabes que va a causar impacto.
+                </p>
+            </div>
+        </div>
+
+        <!-- ============ CLOSING ============ -->
+        <div class="letter-section" data-section="11" style="margin-top: 4rem;">
+            <p class="letter-paragraph" style="text-align: center; font-size: 1.15em;">
+                Te amo <span class="highlight-name">Juana,</span> últimamente te veo mucho más bonita y eso me gusta... así que síguele trabajando para ser <span class="emphasis">la mejor diseñadora gráfica de este país y del mundo.</span> 🌎✨
+            </p>
+        </div>
+    </div>
+
+    <!-- ============ FINAL SIGNATURE ============ -->
+    <div class="final-sign" id="finalSign">
+        <p class="big-love">Te amo, Juanis 💛</p>
+        <p class="sign-name">— Tu mejor amigo, ese pendejo</p>
+    </div>
+
+    <!-- ============ AUDIO ============ -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ============ JAVASCRIPT ============ -->
+    <script>
+        // ============ ENVELOPE INTERACTION ============
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
+        const envelope = document.getElementById('envelope');
+        const preloader = document.getElementById('preloader');
+
+        envelopeWrapper.addEventListener('click', () => {
+            envelope.classList.add('open');
+            setTimeout(() => {
+                envelopeWrapper.classList.add('hidden');
+                // Show preloader briefly
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                }, 2000);
+            }, 1200);
+        });
+
+        // ============ PARTICLES ============
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = -Math.random() * 0.5 - 0.1;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.color = ['#c97b6b', '#e8a87c', '#d4a5a5', '#f0d5c4'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.opacity -= 0.001;
+
+                if (this.y < -10 || this.opacity <= 0) {
+                    this.reset();
+                    this.y = canvas.height + 10;
+                    this.opacity = Math.random() * 0.5 + 0.1;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // ============ SCROLL REVEAL ============
+        const sections = document.querySelectorAll('.letter-section, .section-divider, .final-sign');
+
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        // ============ SCROLL PROGRESS ============
+        const scrollProgress = document.getElementById('scrollProgress');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+        });
+
+        // ============ MUSIC ============
+        const musicToggle = document.getElementById('musicToggle');
+        const musicBars = document.getElementById('musicBars');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        bgMusic.volume = 0.3;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBars.classList.remove('playing');
+            } else {
+                bgMusic.play().catch(() => {});
+                musicBars.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // ============ HEART FLOAT ON CLICK ============
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.music-toggle') || e.target.closest('.envelope-wrapper')) return;
+
+            const hearts = ['💛', '🧡', '💕', '✨', '🤍'];
+            const heart = document.createElement('div');
+            heart.classList.add('heart-float');
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 3000);
+        });
+
+        // ============ SPARKLE CURSOR (subtle) ============
+        let sparkleTimeout;
+        document.addEventListener('mousemove', (e) => {
+            clearTimeout(sparkleTimeout);
+            sparkleTimeout = setTimeout(() => {
+                if (Math.random() > 0.7) {
+                    const sparkle = document.createElement('div');
+                    sparkle.classList.add('sparkle');
+                    sparkle.textContent = '✦';
+                    sparkle.style.left = e.clientX + 'px';
+                    sparkle.style.top = e.clientY + 'px';
+                    sparkle.style.color = ['#c97b6b', '#e8a87c', '#d4a5a5'][Math.floor(Math.random() * 3)];
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 800);
+                }
+            }, 50);
+        });
+
+        // ============ PARALLAX HERO ============
+        const hero = document.getElementById('hero');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            if (scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+                hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.8;
+            }
+        });
+    </script>
+</body>
+</html>
